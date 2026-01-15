@@ -345,6 +345,7 @@ Dashboard → Toko → List/Create/Edit/Delete Toko
 - Tambah toko baru (code, name, phone)
 - Edit info toko
 - Aktif/Non-aktifkan toko
+- 1 Toko 1 Salesman
 ```
 
 **3. Kelola Produk**
@@ -356,7 +357,15 @@ Dashboard → Produk → List/Create/Edit/Delete Produk
 - Sync dari data_part.tblpart_id (optional)
 ```
 
-**4. Approval Order**
+**4. Crud Sales dan SPV**
+```
+- Tambah Sales
+- Edit Sales & Hapus Sales
+- field jabatan (sales atau spv)
+```
+
+
+**. Approval Order**
 ```
 Dashboard → Orders → List Pending Orders
 - Lihat detail order
