@@ -12,11 +12,24 @@ class PartController extends Controller
 {
     public function index(Request $request)
     {
+        $bulan = date('n');
+        $tahun = date('Y');
+        
         $query = Part::query();
 
         // Filter: hanya part aktif dan harga > 0
         $query->where('part_active', true)
               ->where('het', '>', 0);
+
+        // Filter: hanya part yang stock ready
+        $query->whereExists(function($q) use ($bulan, $tahun) {
+            $q->select(\DB::raw(1))
+              ->from('data_part.tblstock_part_id')
+              ->whereColumn('data_part.tblstock_part_id.fk_part', 'public.tblpart_id.kd_part')
+              ->where('data_part.tblstock_part_id.bulan', $bulan)
+              ->where('data_part.tblstock_part_id.tahun', $tahun)
+              ->whereRaw('(data_part.tblstock_part_id.qty_on_hand - data_part.tblstock_part_id.qty_booking - public.tblpart_id.min_stok) >= 1');
+        });
 
         // Search
         if ($request->has('search')) {
@@ -70,7 +83,7 @@ class PartController extends Controller
                     'name' => $name,
                     'description' => $description,
                     'price' => (float) $part->het,
-                    'isReady' => $stock ? $stock->is_available : false,
+                    'isReady' => true, // Pasti true karena sudah difilter
                 ];
             }),
             'pagination' => [
